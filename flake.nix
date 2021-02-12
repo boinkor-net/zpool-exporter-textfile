@@ -5,22 +5,28 @@
     flake-utils.url = "github:numtide/flake-utils";
     naersk.url = "github:nmattia/naersk";
   };
-  outputs = { nixpkgs, flake-utils, naersk, ... }:
+  outputs = { self, nixpkgs, flake-utils, naersk, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
         naersk-lib = naersk.lib."${system}";
+        nativeBuildInputs = with pkgs; [ pkgconfig zfs ];
       in
-      {
+      rec {
         devShell =
           pkgs.mkShell {
-            nativeBuildInputs = with pkgs; [ pkgconfig zfs ];
-            shellHook = ''
-            '';
+            inherit nativeBuildInputs;
           };
 
-        defaultPackage = naersk-lib.buildPackage {
+        packages.zpool-exporter-textfile = naersk-lib.buildPackage {
+          inherit nativeBuildInputs;
           src = ./.;
+        };
+
+        defaultPackage = packages.zpool-exporter-textfile;
+
+        apps.zpool-exporter-textfile = flake-utils.lib.mkApp {
+          drv = defaultPackage;
         };
       });
 }
