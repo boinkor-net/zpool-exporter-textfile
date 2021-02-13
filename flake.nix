@@ -62,7 +62,7 @@
 
                 exporterPackage = mkOption {
                   description = "Package containing the zpool-exporter-textfile that we should use to collect statuses.";
-                  default = self.packages.${system}.zpool-exporter-textfile;
+                  default = self.defaultPackage.zpool-exporter-textfile;
                 };
               };
             };
