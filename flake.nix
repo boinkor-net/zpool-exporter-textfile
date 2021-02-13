@@ -26,12 +26,7 @@
           };
 
           defaultPackage = packages.zpool-exporter-textfile;
-
-          apps.zpool-exporter-textfile = flake-utils.lib.mkApp {
-            drv = defaultPackage;
-          };
-
         }) // {
-      nixosModules.zpool-exporter-textfile = import ./nixos;
+      nixosModules.zpool-exporter-textfile = import ./nixos { flake = self; };
     };
 }

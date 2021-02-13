@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ... }:
+{ flake }: { pkgs, lib, config, ... }:
 let
   cfg = config.zpool-exporter-textfile;
 in
@@ -30,7 +30,7 @@ in
 
       exporterPackage = mkOption {
         description = "Package containing the zpool-exporter-textfile that we should use to collect statuses.";
-        default = pkgs.zpool-exporter-textfile;
+        default = flake.packages.${pkgs.stdenv.targetPlatform.system}.zpool-exporter-textfile;
       };
     };
   };
