@@ -13,13 +13,13 @@ in
 
       regenerateInterval = mkOption {
         description = "Interval at which to poll the zpool status, in systemd.timer(5) format.";
-        type = types.string;
+        type = types.str;
         default = "5min";
       };
 
       user = mkOption {
         description = "User to use for polling the zpool status. Defaults to a dynamically-generated user.";
-        type = types.string;
+        type = with types; nullOr str;
         default = null;
       };
 
