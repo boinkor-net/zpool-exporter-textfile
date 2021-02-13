@@ -45,6 +45,7 @@ in
         {
           Type = "oneshot";
           StateDirectory = "zpool-exporter-textfile";
+          StateDirectoryMode = "0755";
         }
         (lib.mkIf (cfg.user == null)
           {
