@@ -5,6 +5,7 @@
     flake-utils.url = "github:numtide/flake-utils";
     naersk.url = "github:nmattia/naersk";
   };
+
   outputs = { self, nixpkgs, flake-utils, naersk, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
@@ -28,5 +29,9 @@
         apps.zpool-exporter-textfile = flake-utils.lib.mkApp {
           drv = defaultPackage;
         };
+
+        overlay = final: prev: { zpool-exporter-textfile = defaultPackage; };
+
+        nixosModules.zpool-exporter-textfile = import ./nixos;
       });
 }
