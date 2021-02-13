@@ -59,7 +59,7 @@ in
 
     systemd.timers.zpool-exporter-textfile = {
       wantedBy = [ "timers.target" ];
-      partOf = "zpool-exporter-textfile.service";
+      partOf = [ "zpool-exporter-textfile.service" ];
       timerConfig = {
         OnUnitActiveSec = cfg.regenerateInterval;
         Persistent = true;
