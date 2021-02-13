@@ -43,3 +43,36 @@ You can use this in a flake like so (I hope!):
   };
 }
 ```
+
+## Example metrics
+
+```txt
+# HELP zpool_health_level Overall health level of a pool. 0 if unhealthy, 1 if healthy.
+# TYPE zpool_health_level gauge
+zpool_health_level{pool="bpool"} 1
+zpool_health_level{pool="data"} 1
+zpool_health_level{pool="rpool"} 1
+# HELP zpool_health_state Health status (1 if the <pool> is at health <state>)
+# TYPE zpool_health_state gauge
+zpool_health_state{pool="bpool",state="Available"} 0
+zpool_health_state{pool="bpool",state="Degraded"} 0
+zpool_health_state{pool="bpool",state="Faulted"} 0
+zpool_health_state{pool="bpool",state="Offline"} 0
+zpool_health_state{pool="bpool",state="Online"} 1
+zpool_health_state{pool="bpool",state="Removed"} 0
+zpool_health_state{pool="bpool",state="Unavailable"} 0
+zpool_health_state{pool="data",state="Available"} 0
+zpool_health_state{pool="data",state="Degraded"} 0
+zpool_health_state{pool="data",state="Faulted"} 0
+zpool_health_state{pool="data",state="Offline"} 0
+zpool_health_state{pool="data",state="Online"} 1
+zpool_health_state{pool="data",state="Removed"} 0
+zpool_health_state{pool="data",state="Unavailable"} 0
+zpool_health_state{pool="rpool",state="Available"} 0
+zpool_health_state{pool="rpool",state="Degraded"} 0
+zpool_health_state{pool="rpool",state="Faulted"} 0
+zpool_health_state{pool="rpool",state="Offline"} 0
+zpool_health_state{pool="rpool",state="Online"} 1
+zpool_health_state{pool="rpool",state="Removed"} 0
+zpool_health_state{pool="rpool",state="Unavailable"} 0
+```
