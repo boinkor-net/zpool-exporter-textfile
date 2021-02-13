@@ -28,8 +28,13 @@ fn is_healthy(health: &Health) -> bool {
     }
 }
 
-fn one_pool_health(pool: &Zpool, health_gauges: &prometheus::IntGaugeVec) {
+fn one_pool_health(
+    pool: &Zpool,
+    health_gauges: &prometheus::IntGaugeVec,
+    overall_health_gauges: &prometheus::IntGaugeVec,
+) {
     let name = pool.name().to_string();
+    let overall_gauge = overall_health_gauges.with_label_values(&[name.as_str()]);
     if !is_healthy(pool.health()) {
         eprintln!(
             "pool {} is at status {:?}: {:?}",
@@ -37,6 +42,9 @@ fn one_pool_health(pool: &Zpool, health_gauges: &prometheus::IntGaugeVec) {
             pool.health(),
             pool.reason()
         );
+        overall_gauge.set(0);
+    } else {
+        overall_gauge.set(1);
     }
     for status in ALL_HEALTH_STATUSES {
         let health: String = format!("{:?}", status);
@@ -68,9 +76,15 @@ fn main() {
         &["pool", "state"]
     )
     .expect("Can't construct zpool_health_state");
+    let overall_health_gauges = register_int_gauge_vec!(
+        "zpool_health_level",
+        "Overall health level of a pool. 0 if unhealthy, 1 if healthy.",
+        &["pool"]
+    )
+    .expect("Can't construct zpool_health_level");
 
     for pool in &pools {
-        one_pool_health(pool, &health_gauges);
+        one_pool_health(pool, &health_gauges, &overall_health_gauges);
     }
     let encoder = TextEncoder::new();
     let metrics = prometheus::gather();
