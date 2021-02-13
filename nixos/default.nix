@@ -66,6 +66,8 @@ in
             Persistent = true;
           };
         };
+
+        services.prometheus.exporters.node.extraFlags = [ "--collector.textfile.directory=/var/lib/zpool-exporter-textfile/" ];
       }
     ]);
 }
