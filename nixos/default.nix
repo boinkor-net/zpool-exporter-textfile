@@ -46,12 +46,11 @@ in
           Type = "oneshot";
           StateDirectory = "zpool-exporter-textfile";
         }
-        (lib.mkIf
-          cfg.user == null
+        (lib.mkIf (cfg.user == null)
           {
             DynamicUser = true;
           })
-        (lib.mkIf cfg.user != null
+        (lib.mkIf (cfg.user != null)
           {
             User = cfg.user;
           })
