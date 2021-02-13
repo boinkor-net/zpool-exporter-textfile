@@ -26,17 +26,16 @@ You can use this in a flake like so (I hope!):
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    home-manager.url = "github:antifuchs/zpool-exporter-textfile";
+    zpool-exporter.url = "github:antifuchs/zpool-exporter-textfile";
   };
 
-  outputs = { home-manager, nixpkgs, ... }: {
+  outputs = { zpool-exporter, nixpkgs, ... }: {
     nixosConfigurations = {
       hostname = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
         modules = [
           ./configuration.nix
-          { nixpkgs.overlays = [ zpool-exporter.overlay.${system} ]; }
-          zpool-exporter.nixosModules.${system}.zpool-exporter-textfile
+          zpool-exporter.nixosModules.zpool-exporter-textfile
           {config, ...}: { zpool-exporter-textfile.enable = true; }
         ];
       };
