@@ -1,3 +1,6 @@
+use std::{fs::File, path::PathBuf};
+
+use clap::Clap;
 use libzetta::zpool::{Health, Zpool, ZpoolEngine, ZpoolOpen3};
 use prometheus::{register_int_gauge_vec, Encoder, TextEncoder};
 
@@ -46,7 +49,16 @@ fn one_pool_health(pool: &Zpool, health_gauges: &prometheus::IntGaugeVec) {
     }
 }
 
+#[derive(Clap)]
+#[clap(version = "0.1", author = "Andreas Fuchs <asf@boinkor.net>")]
+struct Opts {
+    /// The file to write metrics to. If omitted, writes to stdout.
+    #[clap(short = 'o', long)]
+    output_file: Option<PathBuf>,
+}
+
 fn main() {
+    let opts: Opts = Opts::parse();
     let engine = ZpoolOpen3::default();
 
     let pools = engine.all().expect("Can not retrieve all pools");
@@ -62,6 +74,10 @@ fn main() {
     }
     let encoder = TextEncoder::new();
     let metrics = prometheus::gather();
-    let mut stdout = std::io::stdout();
-    encoder.encode(&metrics, &mut stdout).unwrap();
+    let mut writer: Box<dyn std::io::Write> = if let Some(file) = opts.output_file {
+        Box::new(File::create(file).expect("Could not open output file"))
+    } else {
+        Box::new(std::io::stdout())
+    };
+    encoder.encode(&metrics, &mut writer).unwrap();
 }
