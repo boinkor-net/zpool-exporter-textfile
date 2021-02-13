@@ -15,3 +15,32 @@ $ zpool-exporter-textfile -o .../zpool_stats.txt
 ## Installation
 
 To build this, you need `libzfs`, as that's a compile time dependency. If you use nix, the included flake.nix will result in a binary that you can use.
+
+### Use in a flake
+
+You can use this in a flake like so (I hope!):
+
+```nix
+{
+  description = "NixOS configuration";
+
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    home-manager.url = "github:antifuchs/zpool-exporter-textfile";
+  };
+
+  outputs = { home-manager, nixpkgs, ... }: {
+    nixosConfigurations = {
+      hostname = nixpkgs.lib.nixosSystem rec {
+        system = "x86_64-linux";
+        modules = [
+          ./configuration.nix
+          { nixpkgs.overlays = [ zpool-exporter.overlay.${system} ]; }
+          zpool-exporter.nixosModules.${system}.zpool-exporter-textfile
+          {config, ...}: { zpool-exporter-textfile.enable = true; }
+        ];
+      };
+    };
+  };
+}
+```
