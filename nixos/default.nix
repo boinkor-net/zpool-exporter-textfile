@@ -18,9 +18,9 @@ in
       };
 
       user = mkOption {
-        description = "User to use for polling the zpool status. Defaults to a dynamically-generated user.";
+        description = "User to use for polling the zpool status.";
         type = with types; nullOr str;
-        default = null;
+        default = "zpool-exporter-textfile";
       };
 
       zfsPackage = mkOption {
@@ -35,36 +35,37 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    systemd.services.zpool-exporter-textfile = {
-      path = [ cfg.zfsPackage ];
-      script = ''
-        ${cfg.exporterPackage}/bin/zpool-exporter-textfile -o $STATE_DIRECTORY/zpool_statuses.prom
-      '';
-      serviceConfig = lib.mkMerge [
+  config = lib.mkIf cfg.enable
+    (lib.mkMerge [
+      (lib.mkIf (cfg.user == "zpool-exporter-textfile")
         {
-          Type = "oneshot";
-          StateDirectory = "zpool-exporter-textfile";
-          StateDirectoryMode = "0755";
-        }
-        (lib.mkIf (cfg.user == null)
-          {
-            DynamicUser = true;
-          })
-        (lib.mkIf (cfg.user != null)
-          {
+          users.users.zpool-exporter-textfile = {
+            description = "Prometheus data gatherer for zpools health";
+            isSystemUser = true;
+          };
+        })
+      {
+        systemd.services.zpool-exporter-textfile = {
+          path = [ cfg.zfsPackage ];
+          script = ''
+            ${cfg.exporterPackage}/bin/zpool-exporter-textfile -o $STATE_DIRECTORY/zpool_statuses.prom
+          '';
+          serviceConfig = {
+            Type = "oneshot";
+            StateDirectory = "zpool-exporter-textfile";
+            StateDirectoryMode = "0755";
             User = cfg.user;
-          })
-      ];
-    };
+          };
+        };
 
-    systemd.timers.zpool-exporter-textfile = {
-      wantedBy = [ "timers.target" ];
-      partOf = [ "zpool-exporter-textfile.service" ];
-      timerConfig = {
-        OnUnitActiveSec = cfg.regenerateInterval;
-        Persistent = true;
-      };
-    };
-  };
+        systemd.timers.zpool-exporter-textfile = {
+          wantedBy = [ "timers.target" ];
+          partOf = [ "zpool-exporter-textfile.service" ];
+          timerConfig = {
+            OnUnitActiveSec = cfg.regenerateInterval;
+            Persistent = true;
+          };
+        };
+      }
+    ]);
 }
