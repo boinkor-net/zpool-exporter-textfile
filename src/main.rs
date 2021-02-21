@@ -1,4 +1,4 @@
-use std::{fs::File, path::PathBuf};
+use std::{io::stdout, path::PathBuf};
 
 use clap::Clap;
 use libzetta::zpool::{Health, Zpool, ZpoolEngine, ZpoolOpen3};
@@ -88,10 +88,16 @@ fn main() {
     }
     let encoder = TextEncoder::new();
     let metrics = prometheus::gather();
-    let mut writer: Box<dyn std::io::Write> = if let Some(file) = opts.output_file {
-        Box::new(File::create(file).expect("Could not open output file"))
+    if let Some(file) = opts.output_file {
+        let cwd = PathBuf::from("./");
+        let dir = file.parent().unwrap_or(&cwd);
+        let mut handle =
+            tempfile::NamedTempFile::new_in(dir).expect("Could not create output handle");
+        encoder.encode(&metrics, &mut handle).unwrap();
+        handle
+            .persist(file)
+            .expect("Could not create destination file");
     } else {
-        Box::new(std::io::stdout())
-    };
-    encoder.encode(&metrics, &mut writer).unwrap();
+        encoder.encode(&metrics, &mut stdout()).unwrap();
+    }
 }
