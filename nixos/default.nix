@@ -39,6 +39,9 @@ in
     (lib.mkMerge [
       (lib.mkIf (cfg.user == "zpool-exporter-textfile")
         {
+          users.users.zpool-exporter-textfile.group = "zpool-exporter-textfile";
+          users.groups.zpool-exporter-textfile = { };
+
           users.users.zpool-exporter-textfile = {
             description = "Prometheus data gatherer for zpools health";
             isSystemUser = true;
