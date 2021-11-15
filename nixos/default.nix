@@ -65,6 +65,7 @@ in
           wantedBy = [ "timers.target" ];
           partOf = [ "zpool-exporter-textfile.service" ];
           timerConfig = {
+            OnActiveSec = "0s";
             OnUnitActiveSec = cfg.regenerateInterval;
             Persistent = true;
           };
