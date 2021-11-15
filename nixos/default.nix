@@ -58,6 +58,14 @@ in
             StateDirectory = "zpool-exporter-textfile";
             StateDirectoryMode = "0755";
             User = cfg.user;
+            ExecStartPost =
+              let
+                prog = pkgs.writeShellScript "fix-perms" ''
+                  chmod -R +r $STATE_DIRECTORY
+                '';
+              in
+              [ "+${prog}" ];
+
           };
         };
 
