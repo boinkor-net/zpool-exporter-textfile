@@ -12,7 +12,7 @@
         let
           pkgs = nixpkgs.legacyPackages.${system};
           naersk-lib = naersk.lib."${system}";
-          nativeBuildInputs = with pkgs; [ pkgconfig zfs ];
+          nativeBuildInputs = with pkgs; [ pkgconfig zfs zfs.dev ];
         in
         rec {
           devShell =

@@ -2,11 +2,11 @@
   "nodes": {
     "flake-utils": {
       "locked": {
-        "lastModified": 1610051610,
-        "narHash": "sha256-U9rPz/usA1/Aohhk7Cmc2gBrEEKRzcW4nwPWMPwja4Y=",
+        "lastModified": 1634851050,
+        "narHash": "sha256-N83GlSGPJJdcqhUxSCS/WwW5pksYf3VP1M13cDRTSVA=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "3982c9903e93927c2164caa727cd3f6a0e6d14cc",
+        "rev": "c91f3de5adaf1de973b797ef7485e441a65b8935",
         "type": "github"
       },
       "original": {
@@ -20,11 +20,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1612192764,
-        "narHash": "sha256-7EnLtZQWP6511G1ZPA7FmJlqAr3hWsAYb24tvTvJ/ec=",
+        "lastModified": 1636968630,
+        "narHash": "sha256-/C8OVV8mo9M9MgQprHo4A5bM9waWMsw6PI4hb4DnGaA=",
         "owner": "nmattia",
         "repo": "naersk",
-        "rev": "6e149bfd726a8ebefa415f2d713ba6d942435abd",
+        "rev": "55c4c0288ea3f115b5dd73af88052c4712994746",
         "type": "github"
       },
       "original": {
@@ -35,10 +35,10 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1612916640,
-        "narHash": "sha256-VqMq/cs+9Bcc/DY7JIXlRHvwg7xRqLSntscWcMCKg/8=",
-        "path": "/nix/store/giwm1i89jvk704k1laihhs2476hs60jk-source",
-        "rev": "66e66b9d481386f4c7a6b998f32ce794af0182ae",
+        "lastModified": 1636254356,
+        "narHash": "sha256-eBujs6+KrAa0WqYwo/zUmzRohKFBqP52x2EcNw5arwE=",
+        "path": "/nix/store/4g24bds0a05p0vj87jzp3v4yy9nywpf2-source",
+        "rev": "81d15682625635d93ba66def75fd13fd16c0515b",
         "type": "path"
       },
       "original": {
@@ -48,10 +48,10 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1612916640,
-        "narHash": "sha256-VqMq/cs+9Bcc/DY7JIXlRHvwg7xRqLSntscWcMCKg/8=",
-        "path": "/nix/store/giwm1i89jvk704k1laihhs2476hs60jk-source",
-        "rev": "66e66b9d481386f4c7a6b998f32ce794af0182ae",
+        "lastModified": 1636254356,
+        "narHash": "sha256-eBujs6+KrAa0WqYwo/zUmzRohKFBqP52x2EcNw5arwE=",
+        "path": "/nix/store/4g24bds0a05p0vj87jzp3v4yy9nywpf2-source",
+        "rev": "81d15682625635d93ba66def75fd13fd16c0515b",
         "type": "path"
       },
       "original": {
