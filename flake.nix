@@ -3,16 +3,14 @@
 
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-    naersk.url = "github:nmattia/naersk";
   };
 
-  outputs = { self, nixpkgs, flake-utils, naersk, ... }:
+  outputs = { self, nixpkgs, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem
       (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
-          naersk-lib = naersk.lib."${system}";
-          nativeBuildInputs = with pkgs; [ pkgconfig zfs zfs.dev ];
+          nativeBuildInputs = with pkgs; [ pkgconfig zfs.dev ];
         in
         rec {
           devShell =
@@ -20,9 +18,14 @@
               inherit nativeBuildInputs;
             };
 
-          packages.zpool-exporter-textfile = naersk-lib.buildPackage {
+          packages.zpool-exporter-textfile = pkgs.rustPlatform.buildRustPackage rec {
+            pname = "zpool-exporter-textfile";
+            version = (builtins.fromTOML (builtins.readFile ./Cargo.toml)).package.version;
             inherit nativeBuildInputs;
             src = ./.;
+            cargoLock.lockFile = ./Cargo.lock;
+
+            buildInputs = nativeBuildInputs;
           };
 
           defaultPackage = packages.zpool-exporter-textfile;
