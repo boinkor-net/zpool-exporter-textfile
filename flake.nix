@@ -10,7 +10,7 @@
       (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
-          nativeBuildInputs = with pkgs; [ pkgconfig zfs.dev ];
+          nativeBuildInputs = with pkgs; [ pkg-config zfs.dev ];
         in
         rec {
           devShell =
