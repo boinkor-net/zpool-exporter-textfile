@@ -3,14 +3,19 @@
 
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
+    gitignore = {
+      url = "github:hercules-ci/gitignore.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, flake-utils, ... }:
+  outputs = { self, nixpkgs, flake-utils, gitignore, ... }:
     flake-utils.lib.eachDefaultSystem
       (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
           nativeBuildInputs = with pkgs; [ pkgconfig zfs.dev ];
+          inherit (gitignore.lib) gitignoreSource;
         in
         rec {
           devShell =
@@ -22,7 +27,7 @@
             pname = "zpool-exporter-textfile";
             version = (builtins.fromTOML (builtins.readFile ./Cargo.toml)).package.version;
             inherit nativeBuildInputs;
-            src = ./.;
+            src = gitignoreSource ./.;
             cargoLock.lockFile = ./Cargo.lock;
 
             buildInputs = nativeBuildInputs;
