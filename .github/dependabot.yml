@@ -4,7 +4,7 @@
     "all":
       "patterns":
       - "*"
-  "open-pull-request-limit": 10
+  "open-pull-requests-limit": 10
   "package-ecosystem": "cargo"
   "schedule":
     "interval": "daily"
@@ -14,7 +14,7 @@
     "all":
       "patterns":
       - "*"
-  "open-pull-request-limit": 10
+  "open-pull-requests-limit": 10
   "package-ecosystem": "github-actions"
   "schedule":
     "interval": "daily"
