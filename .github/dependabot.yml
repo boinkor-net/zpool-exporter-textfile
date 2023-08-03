@@ -1,7 +1,7 @@
 "updates":
 - "directory": "/"
   "groups":
-  - "all":
+    "all":
       "patterns":
       - "*"
   "open-pull-request-limit": 10
@@ -11,7 +11,7 @@
     "time": "04:00"
 - "directory": "/"
   "groups":
-  - "all":
+    "all":
       "patterns":
       - "*"
   "open-pull-request-limit": 10
