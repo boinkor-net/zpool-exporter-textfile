@@ -1,6 +1,6 @@
 use std::{io::stdout, path::PathBuf};
 
-use clap::Clap;
+use clap::Parser;
 use libzetta::zpool::{Health, Zpool, ZpoolEngine, ZpoolOpen3};
 use prometheus::{register_int_gauge_vec, Encoder, TextEncoder};
 
@@ -57,7 +57,7 @@ fn one_pool_health(
     }
 }
 
-#[derive(Clap)]
+#[derive(Parser, Debug)]
 #[clap(version = "0.1", author = "Andreas Fuchs <asf@boinkor.net>")]
 struct Opts {
     /// The file to write metrics to. If omitted, writes to stdout.
