@@ -22,10 +22,7 @@ const ALL_HEALTH_STATUSES: &[Health] = {
 
 /// Returns true if the health status is OK.
 fn is_healthy(health: &Health) -> bool {
-    match health {
-        Health::Available | Health::Online => true,
-        _ => false,
-    }
+    matches!(health, Health::Available | Health::Online)
 }
 
 fn one_pool_health(
