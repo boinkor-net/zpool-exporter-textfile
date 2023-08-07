@@ -69,7 +69,9 @@ fn main() {
     let opts: Opts = Opts::parse();
     let engine = ZpoolOpen3::default();
 
-    let pools = engine.all().expect("Can not retrieve all pools");
+    let pools = engine
+        .status_all(Default::default())
+        .expect("Can not retrieve all pools");
     let health_gauges = register_int_gauge_vec!(
         "zpool_health_state",
         "Health status (1 if the <pool> is at health <state>)",
