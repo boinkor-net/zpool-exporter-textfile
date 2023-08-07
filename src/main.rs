@@ -1,6 +1,6 @@
 use std::{io::stdout, path::PathBuf};
 
-use clap::Clap;
+use clap::Parser;
 use libzetta::zpool::{Health, Zpool, ZpoolEngine, ZpoolOpen3};
 use prometheus::{register_int_gauge_vec, Encoder, TextEncoder};
 
@@ -22,10 +22,7 @@ const ALL_HEALTH_STATUSES: &[Health] = {
 
 /// Returns true if the health status is OK.
 fn is_healthy(health: &Health) -> bool {
-    match health {
-        Health::Available | Health::Online => true,
-        _ => false,
-    }
+    matches!(health, Health::Available | Health::Online)
 }
 
 fn one_pool_health(
@@ -57,7 +54,7 @@ fn one_pool_health(
     }
 }
 
-#[derive(Clap)]
+#[derive(Parser, Debug)]
 #[clap(version = "0.1", author = "Andreas Fuchs <asf@boinkor.net>")]
 struct Opts {
     /// The file to write metrics to. If omitted, writes to stdout.
@@ -69,7 +66,9 @@ fn main() {
     let opts: Opts = Opts::parse();
     let engine = ZpoolOpen3::default();
 
-    let pools = engine.all().expect("Can not retrieve all pools");
+    let pools = engine
+        .status_all(Default::default())
+        .expect("Can not retrieve all pools");
     let health_gauges = register_int_gauge_vec!(
         "zpool_health_state",
         "Health status (1 if the <pool> is at health <state>)",
