@@ -4,6 +4,7 @@ on:
 
 jobs:
   flake_build:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.5.3
