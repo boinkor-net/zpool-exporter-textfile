@@ -23,4 +23,4 @@ slog = "2.7.0"
 slog-term = "2.9.0"
 prometheus = "0.13.3"
 tempfile = "3.7.1"
-clap = { version = "4.3.19", features = ["derive"] }
+clap = { version = "4.3.21", features = ["derive"] }
