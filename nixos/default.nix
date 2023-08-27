@@ -1,8 +1,11 @@
-{ flake }: { pkgs, lib, config, ... }:
-let
+{flake}: {
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
   cfg = config.zpool-exporter-textfile;
-in
-{
+in {
   options = with lib; {
     zpool-exporter-textfile = {
       enable = mkOption {
@@ -35,12 +38,13 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable
+  config =
+    lib.mkIf cfg.enable
     (lib.mkMerge [
       (lib.mkIf (cfg.user == "zpool-exporter-textfile")
         {
           users.users.zpool-exporter-textfile.group = "zpool-exporter-textfile";
-          users.groups.zpool-exporter-textfile = { };
+          users.groups.zpool-exporter-textfile = {};
 
           users.users.zpool-exporter-textfile = {
             description = "Prometheus data gatherer for zpools health";
@@ -49,7 +53,7 @@ in
         })
       {
         systemd.services.zpool-exporter-textfile = {
-          path = [ cfg.zfsPackage ];
+          path = [cfg.zfsPackage];
           script = ''
             ${cfg.exporterPackage}/bin/zpool-exporter-textfile -o $STATE_DIRECTORY/zpool_statuses.prom
           '';
@@ -58,20 +62,17 @@ in
             StateDirectory = "zpool-exporter-textfile";
             StateDirectoryMode = "0755";
             User = cfg.user;
-            ExecStartPost =
-              let
-                prog = pkgs.writeShellScript "fix-perms" ''
-                  chmod -R +r $STATE_DIRECTORY
-                '';
-              in
-              [ "+${prog}" ];
-
+            ExecStartPost = let
+              prog = pkgs.writeShellScript "fix-perms" ''
+                chmod -R +r $STATE_DIRECTORY
+              '';
+            in ["+${prog}"];
           };
         };
 
         systemd.timers.zpool-exporter-textfile = {
-          wantedBy = [ "timers.target" ];
-          partOf = [ "zpool-exporter-textfile.service" ];
+          wantedBy = ["timers.target"];
+          partOf = ["zpool-exporter-textfile.service"];
           timerConfig = {
             OnActiveSec = "0s";
             OnUnitActiveSec = cfg.regenerateInterval;
@@ -79,7 +80,7 @@ in
           };
         };
 
-        services.prometheus.exporters.node.extraFlags = [ "--collector.textfile.directory=/var/lib/zpool-exporter-textfile/" ];
+        services.prometheus.exporters.node.extraFlags = ["--collector.textfile.directory=/var/lib/zpool-exporter-textfile/"];
       }
     ]);
 }
