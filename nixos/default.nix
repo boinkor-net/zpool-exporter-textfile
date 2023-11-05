@@ -35,6 +35,11 @@ in {
         description = "Package containing the zpool-exporter-textfile that we should use to collect statuses.";
         default = flake.packages.${pkgs.stdenv.targetPlatform.system}.zpool-exporter-textfile;
       };
+
+      textfileDir = mkOption {
+        description = "Directory under /etc in which the prometheus node_exporter's textfiles are collected. The node_exporter must be set up to collect the text files in thir directory, via the option `services.prometheus.exporters.node.extraFlags = [\"--collector.textfile.directory=/etc/\${config.zpool-exporter-textfile.textfileDir}\"]`";
+        type = with types; str;
+      };
     };
   };
 
@@ -79,8 +84,9 @@ in {
             Persistent = true;
           };
         };
-
-        services.prometheus.exporters.node.extraFlags = ["--collector.textfile.directory=/var/lib/zpool-exporter-textfile/"];
+        environment.etc."${config.zpool-exporter-textfile.textfileDir}/zpool-exporter-textfile.prom" = {
+          source = "/var/lib/zpool-exporter-textfile/zpool_statuses.prom";
+        };
       }
     ]);
 }

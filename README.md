@@ -36,7 +36,15 @@ You can use this in a flake like so (I hope!):
         modules = [
           ./configuration.nix
           zpool-exporter.nixosModules.zpool-exporter-textfile
-          {config, ...}: { zpool-exporter-textfile.enable = true; }
+          {config, ...}: {
+            zpool-exporter-textfile = {
+              enable = true;
+              textfileDir = "node_exporter_textfiles";
+            };
+            services.prometheus.exporters.node.extraFlags = [
+              "--collector.textfile.directory=/etc/node_exporter_textfiles/"
+            ];
+          }
         ];
       };
     };
