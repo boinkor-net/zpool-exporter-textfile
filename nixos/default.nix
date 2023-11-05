@@ -37,7 +37,7 @@ in {
       };
 
       textfileDir = mkOption {
-        description = "Directory under /etc in which the prometheus node_exporter's textfiles are collected. The node_exporter must be set up to collect the text files in thir directory, via the option `services.prometheus.exporters.node.extraFlags = [" /etc/${config.zpool-exporter-textfile.textfileDir} "]`";
+        description = "Directory under /etc in which the prometheus node_exporter's textfiles are collected. The node_exporter must be set up to collect the text files in thir directory, via the option `services.prometheus.exporters.node.extraFlags = [\"--collector.textfile.directory=/etc/\${config.zpool-exporter-textfile.textfileDir}\"]`";
         type = with types; str;
       };
     };
