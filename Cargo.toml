@@ -20,5 +20,5 @@ version = "stable"
 [dependencies]
 libzetta = "0.5.0"
 prometheus = "0.13.3"
-tempfile = "3.8.1"
-clap = { version = "4.4.11", features = ["derive"] }
+tempfile = "3.9.0"
+clap = { version = "4.4.16", features = ["derive"] }
