@@ -7,13 +7,13 @@ jobs:
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.6
-      - uses: cachix/install-nix-action@V27
+      - uses: actions/checkout@v4.1.7
+      - uses: cachix/install-nix-action@V28
       - run: nix build --no-link path:.#
 
   flake_check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.6
-      - uses: cachix/install-nix-action@V27
+      - uses: actions/checkout@v4.1.7
+      - uses: cachix/install-nix-action@V28
       - run: nix flake check path:.
