@@ -2,8 +2,13 @@
   description = "A tool that reads zpool statuses (especially health) and writes them to a directory in prometheus textfile format.";
 
   inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+
     flake-utils.url = "github:numtide/flake-utils";
-    rust-overlay.url = "github:oxalica/rust-overlay";
+
+    fenix.url = "github:nix-community/fenix";
+    fenix.inputs.nixpkgs.follows = "nixpkgs";
+
     gitignore = {
       url = "github:hercules-ci/gitignore.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -14,20 +19,16 @@
     self,
     nixpkgs,
     flake-utils,
-    rust-overlay,
+    fenix,
     gitignore,
     ...
   }:
     flake-utils.lib.eachDefaultSystem
     (system: let
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [(import rust-overlay)];
-      };
+      pkgs = import nixpkgs {inherit system;};
       nativeBuildInputs = with pkgs; [pkg-config zfs.dev];
       rustPlatform = pkgs.makeRustPlatform {
-        rustc = pkgs.rust-bin.stable.latest.minimal;
-        cargo = pkgs.rust-bin.stable.latest.minimal;
+        inherit (fenix.packages.${system}.stable) cargo rustc;
       };
       inherit (gitignore.lib) gitignoreSource;
     in rec {
