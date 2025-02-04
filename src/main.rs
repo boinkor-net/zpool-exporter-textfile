@@ -4,12 +4,23 @@ use clap::Parser;
 use libzetta::zpool::{Health, Zpool, ZpoolEngine, ZpoolOpen3};
 use prometheus::{register_int_gauge_vec, Encoder, TextEncoder};
 
-const ALL_HEALTH_STATUSES: &[Health] = {
-    // TODO: ensure that we're listing them exhaustively; there must be
-    // some macro magic I could do via a constructed closure with a match
-    // in it, but I can't figure out the syntax atm.
-    use Health::*;
-    &[
+macro_rules! define_all_health_statuses {
+    ($const_name:ident = [$($variant:tt ,)+]) => {
+       const $const_name: &[Health] = {
+           &[$(::libzetta::zpool::Health::$variant),*]
+       };
+        #[test]
+        fn test_all_statuses_exhaustive() {
+            let status = ::libzetta::zpool::Health::Online;
+            match status {
+                $(::libzetta::zpool::Health::$variant => {}),*
+            }
+        }
+   };
+}
+
+define_all_health_statuses!(
+    ALL_HEALTH_STATUSES = [
         Online,
         Degraded,
         Faulted,
@@ -17,8 +28,9 @@ const ALL_HEALTH_STATUSES: &[Health] = {
         Available,
         Unavailable,
         Removed,
+        Inuse,
     ]
-};
+);
 
 /// Returns true if the health status is OK.
 fn is_healthy(health: &Health) -> bool {
