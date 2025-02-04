@@ -44,11 +44,12 @@
         inherit nativeBuildInputs;
         src = gitignoreSource ./.;
         cargoLock.lockFile = ./Cargo.lock;
+        doCheck = true;
 
         buildInputs = nativeBuildInputs;
       };
 
-      defaultPackage = packages.zpool-exporter-textfile;
+      packages.default = packages.zpool-exporter-textfile;
     })
     // {
       nixosModules.zpool-exporter-textfile = import ./nixos {flake = self;};
