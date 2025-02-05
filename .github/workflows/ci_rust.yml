@@ -9,6 +9,7 @@ jobs:
       matrix:
         rust_toolchain: ["nightly","stable"]
         cargo_test_args: [""]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: github.com/boinkor-net/ci-baseline-rust/actions/test@main
@@ -19,6 +20,7 @@ jobs:
           apt_install_packages: "libzfslinux-dev"
 
   rust_fmt:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: github.com/boinkor-net/ci-baseline-rust/actions/fmt@main
@@ -27,6 +29,7 @@ jobs:
           manifest_dir: .
 
   clippy:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: github.com/boinkor-net/ci-baseline-rust/actions/clippy@main
@@ -35,6 +38,7 @@ jobs:
           apt_install_packages: "libzfslinux-dev"
 
   cargo_deny:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: github.com/boinkor-net/ci-baseline-rust/actions/cargo_deny@main
