@@ -21,4 +21,4 @@ version = "stable"
 libzetta = "0.5.0"
 prometheus = "0.13.4"
 tempfile = "3.10.1"
-clap = { version = "4.5.29", features = ["derive"] }
+clap = { version = "4.5.30", features = ["derive"] }
