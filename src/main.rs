@@ -56,7 +56,7 @@ fn one_pool_health(
         overall_gauge.set(1);
     }
     for status in ALL_HEALTH_STATUSES {
-        let health: String = format!("{:?}", status);
+        let health: String = format!("{status:?}");
         let gauge = health_gauges.with_label_values(&[name.as_str(), &health]);
         if status == pool.health() {
             gauge.set(1);
